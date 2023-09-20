@@ -10,16 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_20_181130) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_20_183037) do
+  create_table "status_mappings", force: :cascade do |t|
+    t.integer "status"
+    t.string "text"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.string "title"
     t.string "description"
-    t.string "status"
     t.date "finished_date"
     t.string "priority"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.integer "status_mapping_id", null: false
+    t.index ["status_mapping_id"], name: "index_tasks_on_status_mapping_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -52,5 +58,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_181130) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "tasks", "status_mappings"
   add_foreign_key "tasks", "users"
 end

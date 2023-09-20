@@ -5,3 +5,7 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+StatusMapping.create(status: 1, text: "Low")
+StatusMapping.create(status: 2, text: "Medium")
+StatusMapping.create(status: 3, text: "High")
