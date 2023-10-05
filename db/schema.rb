@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_20_231706) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_05_211743) do
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
   create_table "priority_mappings", force: :cascade do |t|
     t.integer "priority"
     t.string "text"
@@ -33,6 +41,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_231706) do
     t.index ["priority_mapping_id"], name: "index_tasks_on_priority_mapping_id"
     t.index ["status_mapping_id"], name: "index_tasks_on_status_mapping_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
+  create_table "tasks_categories", force: :cascade do |t|
+    t.integer "task_id", null: false
+    t.integer "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_tasks_categories_on_category_id"
+    t.index ["task_id"], name: "index_tasks_categories_on_task_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -64,7 +81,31 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_231706) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "workspace_tasks", force: :cascade do |t|
+    t.integer "task_id", null: false
+    t.integer "workspace_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_workspace_tasks_on_task_id"
+    t.index ["workspace_id"], name: "index_workspace_tasks_on_workspace_id"
+  end
+
+  create_table "workspaces", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "user_id_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id_id"], name: "index_workspaces_on_user_id_id"
+  end
+
+  add_foreign_key "categories", "users"
   add_foreign_key "tasks", "priority_mappings"
   add_foreign_key "tasks", "status_mappings"
   add_foreign_key "tasks", "users"
+  add_foreign_key "tasks_categories", "categories"
+  add_foreign_key "tasks_categories", "tasks"
+  add_foreign_key "workspace_tasks", "tasks"
+  add_foreign_key "workspace_tasks", "workspaces"
+  add_foreign_key "workspaces", "user_ids"
 end
